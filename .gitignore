@@ -1,0 +1,14 @@
+# Nextflow
+work/
+.nextflow*
+results/
+
+# Data (too large / potentially sensitive)
+data/*.vcf
+data/*.vcf.gz
+data/*.tsv
+!data/test/
+
+# OS
+.DS_Store
+Thumbs.db
