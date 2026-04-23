@@ -1,9 +1,10 @@
 #!/usr/bin/env nextflow
 
-include { NORMALIZE_VCF }  from './modules/local/normalize_vcf.nf'
-include { FILTER_GWAS }    from './modules/local/filter_gwas.nf'
-include { MATCH_VARIANTS } from './modules/local/match_variants.nf'
-include { COMPUTE_DOSAGE } from './modules/local/compute_dosage.nf'
+include { NORMALIZE_VCF }    from './modules/local/normalize_vcf.nf'
+include { FILTER_GWAS }      from './modules/local/filter_gwas.nf'
+include { MATCH_VARIANTS }   from './modules/local/match_variants.nf'
+include { COMPUTE_DOSAGE }   from './modules/local/compute_dosage.nf'
+include { SUMMARISE_TRAITS } from './modules/local/summarise_traits.nf'
 
 workflow {
 
@@ -15,15 +16,19 @@ workflow {
 
     NORMALIZE_VCF(vcf_ch)
     FILTER_GWAS(gwas_ch)
+
     MATCH_VARIANTS(
         NORMALIZE_VCF.out.vcf,
         NORMALIZE_VCF.out.tbi,
         FILTER_GWAS.out.tsv
     )
-    COMPUTE_DOSAGE(MATCH_VARIANTS.out.tsv)
 
-    NORMALIZE_VCF.out.vcf.view   { "Normalised VCF: $it" }
-    FILTER_GWAS.out.tsv.view     { "Filtered GWAS:  $it" }
-    MATCH_VARIANTS.out.tsv.view  { "Matched:        $it" }
-    COMPUTE_DOSAGE.out.tsv.view  { "Annotated:      $it" }
+    COMPUTE_DOSAGE(MATCH_VARIANTS.out.tsv)
+    SUMMARISE_TRAITS(COMPUTE_DOSAGE.out.tsv)
+
+    NORMALIZE_VCF.out.vcf.view     { "Normalised VCF: $it" }
+    FILTER_GWAS.out.tsv.view       { "Filtered GWAS:  $it" }
+    MATCH_VARIANTS.out.tsv.view    { "Matched:        $it" }
+    COMPUTE_DOSAGE.out.tsv.view    { "Annotated:      $it" }
+    SUMMARISE_TRAITS.out.tsv.view  { "Trait summary:  $it" }
 }
