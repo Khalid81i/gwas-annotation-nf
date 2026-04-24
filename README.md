@@ -189,6 +189,7 @@ annotation and GWAS interpretation logic I developed during a clinical
 bioinformatics internship at NoorDX (Jeddah, Saudi Arabia). The original Bash
 implementation processed real diagnostic sequencing data; this open-source
 version uses only public test data and is safe to share, extend, and deploy.
+A detailed technical case study of the original NoorDX work — including the AncestryG81 (population genetics, PLINK 2.0 + ADMIXTURE) and PharmaGB (pharmacogenomics) layers, engineering challenges encountered, and what I would do differently — is available at [`NOORDX_CASE_STUDY.md`](./NOORDX_CASE_STUDY.md).
 
 Key improvements over the original Bash pipeline:
 
